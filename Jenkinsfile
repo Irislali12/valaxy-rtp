@@ -1,4 +1,4 @@
-def imageName = 'iris.jfrog.io/default-maven-local/valaxy-rtp'
+def imageName = 'iris.jfrog.io/valaxy-docker/valaxy-rtp'
 def registry  = 'https://iris.jfrog.io'
 def version   = '2.0.1'
 def app

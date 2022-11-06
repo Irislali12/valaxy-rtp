@@ -1,6 +1,6 @@
 def imageName = 'iris.jfrog.io/default-maven-local/valaxy-rtp'
 def registry  = 'https://iris.jfrog.io'
-def version   = '1.0.2'
+def version   = '2.0.1'
 def app
 pipeline {
     agent {
@@ -80,7 +80,8 @@ pipeline {
                 script {
                    echo '<--------------- Docker Publish Started --------------->'  
                     docker.withRegistry(registry, 'artifact-credential'){
-                        app.push()
+                        docker.image(imageName).push(env=BUILD_ID)
+                        //app.push()
                     }    
                    echo '<--------------- Docker Publish Ended --------------->'  
                 }

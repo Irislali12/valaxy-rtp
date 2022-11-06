@@ -1,5 +1,5 @@
-def imageName = 'iris.jfrog.io/valaxy-docker/valaxy-rtp'
-def registry  = 'https://iris.jfrog.io'
+def imageName = 'https://iris.jfrog.io/ui/repos/tree/General/default-maven-local/valaxy-docker/valaxy-rtp'
+def registry  = 'https://iris.jfrog.io/ui/repos/tree/General/default-maven-local'
 def version   = '1.0.2'
 def app
 pipeline {
@@ -38,21 +38,6 @@ pipeline {
             }   
         }    
         
-          stage ("Quality Gate") {
-
-            steps {
-                script {
-                  echo '<--------------- Quality Gate started  --------------->' 
-                    timeout(time: 1, unit: 'HOURS') {
-                        def qg = waitForQualityGate()
-                        if(qg.status!='OK'){
-                          error "Pipeline failed due to the Quality gate issue"   
-                        }    
-                    }    
-                  echo '<--------------- Quality Gate stopped  --------------->'
-                }    
-            }   
-        }          
         
         stage(" Docker Build ") {
           steps {

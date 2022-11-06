@@ -1,4 +1,4 @@
-def imageName = 'iris.jfrog.io/valaxy-docker/valaxy-rtp'
+def imageName = 'iris.jfrog.io/default-maven-local/valaxy-rtp'
 def registry  = 'https://iris.jfrog.io'
 def version   = '1.0.2'
 def app
@@ -59,7 +59,7 @@ pipeline {
                               "files": [
                                 {
                                   "pattern": "jarstaging/(*)",
-                                  "target": "valaxy-libs-release/{1}",
+                                  "target": "default-maven-local/{1}",
                                   "flat": "false",
                                   "props" : "${properties}",
                                   "exclusions": [ "*.sha1", "*.md5"]

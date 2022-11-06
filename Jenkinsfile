@@ -1,5 +1,5 @@
-def imageName = 'iris-demo/valaxy-docker/valaxy-rtp'
-def registry  = '883961463906.dkr.ecr.us-east-1.amazonaws.com/iris-demo'
+def imageName = 'iris.jfrog.io/valaxy-docker/valaxy-rtp'
+def registry  = 'https://iris.jfrog.io'
 def version   = '1.0.2'
 def app
 pipeline {
@@ -72,17 +72,19 @@ pipeline {
                 
                 }
             }   
-        }    
-
-        // Uploading Docker images into AWS ECR
-    stage('Pushing to ECR') {
-     steps{  
-         script {
-                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 883961463906.dkr.ecr.us-east-1.amazonaws.com'
-                sh 'docker push 883961463906.dkr.ecr.us-east-1.amazonaws.com/iris-demo:latest'
-         }
         }
-      }
-   
+
+        stage (" Docker Publish "){
+            steps {
+                script {
+                   echo '<--------------- Docker Publish Started --------------->'  
+                    docker.withRegistry(registry, 'dockercredentialid'){
+                        app.push()
+                    }    
+                   echo '<--------------- Docker Publish Ended --------------->'  
+                }
+            }
+        }    
     }
 }    
+     

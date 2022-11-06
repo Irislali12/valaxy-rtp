@@ -1,6 +1,6 @@
 def imageName = 'iris.jfrog.io/valaxy-docker/valaxy-rtp'
 def registry  = 'https://iris.jfrog.io'
-def version   = '2.0.1'
+def version   = '1.0.2'
 def app
 pipeline {
     agent {

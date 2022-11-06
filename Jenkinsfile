@@ -79,7 +79,7 @@ pipeline {
             steps {
                 script {
                    echo '<--------------- Docker Publish Started --------------->'  
-                    docker.withRegistry(registry, 'dockercredentialid'){
+                    docker.withRegistry(registry, 'artifact-credential'){
                         app.push()
                     }    
                    echo '<--------------- Docker Publish Ended --------------->'  

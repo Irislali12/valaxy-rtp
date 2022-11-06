@@ -80,8 +80,8 @@ pipeline {
                 script {
                    echo '<--------------- Docker Publish Started --------------->'  
                     docker.withRegistry(registry, 'artifact-credential'){
-                        docker.image(imageName).push(env=BUILD_ID)
-                        //app.push()
+                        //docker.image(imageName).push(env=BUILD_ID)
+                        app.push()
                     }    
                    echo '<--------------- Docker Publish Ended --------------->'  
                 }

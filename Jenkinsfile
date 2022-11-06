@@ -1,5 +1,5 @@
-def imageName = 'https://iris.jfrog.io/ui/repos/tree/General/default-maven-local/valaxy-docker/valaxy-rtp'
-def registry  = 'https://iris.jfrog.io/ui/repos/tree/General/default-maven-local'
+def imageName = 'iris.jfrog.io/default-maven-local/valaxy-rtp'
+def registry  = 'https://iris.jfrog.io'
 def version   = '1.0.2'
 def app
 pipeline {

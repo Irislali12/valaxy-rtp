@@ -17,7 +17,7 @@ spec:
       - name: cred
       containers:
       - name:  valaxy-rtp
-        image: stalinrtp.jfrog.io/valaxy-docker/valaxy-rtp:1.0.2
+        image: iris.jfrog.io/valaxy-docker/valaxy-rtp:1.0.2
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
@@ -30,4 +30,3 @@ spec:
           value: "9703354-52rXHD6EeOQeYyhtNz1w8UVOgbcLcgOo4O7MB6WV3"
         - name: ACCESS_TOKEN_SECRET
           value: "zBThlZDEp8qnu7NwwdHNth8eg3Rf9zqbvUEFUTaZtN2SF"
-

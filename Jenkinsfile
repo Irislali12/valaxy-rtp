@@ -1,5 +1,5 @@
-def imageName = 'stalinrtp.jfrog.io/valaxy-docker/valaxy-rtp'
-def registry  = 'https://stalinrtp.jfrog.io'
+def imageName = 'iris-demo/valaxy-rtp'
+def registry  = '883961463906.dkr.ecr.us-east-1.amazonaws.com/iris-demo'
 def version   = '1.0.2'
 def app
 pipeline {
@@ -17,7 +17,6 @@ pipeline {
                 echo '<------------- Build completed --------------->'
             }
         }
-        
         stage('Unit Test') {
             steps {
                 echo '<--------------- Unit Testing started  --------------->'
@@ -39,20 +38,62 @@ pipeline {
             }   
         }    
         
-          stage ("Quality Gate") {
-
+        
+        stage(" Docker Build ") {
+          steps {
+            script {
+               echo '<--------------- Docker Build Started --------------->'
+               app = docker.build(imageName+":"+version)
+               echo '<--------------- Docker Build Ends --------------->'
+            }
+          }
+        }
+        
+        stage("Jar Publish") {
             steps {
                 script {
-                  echo '<--------------- Quality Gate started  --------------->' 
-                    timeout(time: 1, unit: 'HOURS') {
-                        def qg = waitForQualityGate()
-                        if(qg.status!='OK'){
-                          error "Pipeline failed due to the Quality gate issue"   
-                        }    
-                    }    
-                  echo '<--------------- Quality Gate stopped  --------------->'
-                }    
+                        echo '<--------------- Jar Publish Started --------------->'
+                         def server = Artifactory.newServer url:registry+"/artifactory" ,  credentialsId:"artifact-credential"
+                         def properties = "buildid=${env.BUILD_ID},commitid=${GIT_COMMIT}";
+                         def uploadSpec = """{
+                              "files": [
+                                {
+                                  "pattern": "jarstaging/(*)",
+                                  "target": "default-maven-local/{1}",
+                                  "flat": "false",
+                                  "props" : "${properties}",
+                                  "exclusions": [ "*.sha1", "*.md5"]
+                                }
+                             ]
+                         }"""
+                         def buildInfo = server.upload(uploadSpec)
+                         buildInfo.env.collect()
+                         server.publishBuildInfo(buildInfo)
+                         echo '<--------------- Jar Publish Ended --------------->'  
+                
+                }
             }   
-        }         
+        }    
+        
+        // Uploading Docker images into AWS ECR
+    stage('Pushing to ECR') {
+     steps{  
+         script {
+                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 883961463906.ecr.us-east-1.amazonaws.com'
+                sh 'docker push 883961463906.dkr.ecr.us-east-1.amazonaws.com/your_ecr_repo:1.0.2'
+         }
+        }
+      }
+
+        stage(" Deploy ") {
+          steps {
+            script {
+               echo '<--------------- Deploy Started --------------->'
+               sh './deploy.sh'
+               echo '<--------------- Deploy Ends --------------->'
+            }
+          }
+        }
+          
     }
  }
